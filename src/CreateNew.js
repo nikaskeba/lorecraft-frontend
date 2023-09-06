@@ -1,5 +1,6 @@
 import Header from './Header';
 import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function CreateNew() {
   const [formData, setFormData] = useState({
@@ -45,44 +46,30 @@ const randomizeAll = () => {
 
   return (
 
-    <div>
-    <Header />
-      <input 
-        type="text" 
-        placeholder="Race" 
-        value={formData.race} 
-        onChange={(e) => setFormData({ ...formData, race: e.target.value })} 
-      />
-      <button onClick={() => randomizeField('race')}>Randomize</button>
-      
-      <input 
-        type="text" 
-        placeholder="Class" 
-        value={formData.class} 
-        onChange={(e) => setFormData({ ...formData, class: e.target.value })} 
-      />
-      <button onClick={() => randomizeField('class')}>Randomize</button>
-      
-      <input 
-        type="text" 
-        placeholder="Gender" 
-        value={formData.gender} 
-        onChange={(e) => setFormData({ ...formData, gender: e.target.value })} 
-      />
-      <button onClick={() => randomizeField('gender')}>Randomize</button>
-      
-      <input 
-        type="text" 
-        placeholder="Custom Details" 
-        value={formData.customDetails} 
-        onChange={(e) => setFormData({ ...formData, customDetails: e.target.value })} 
-      />
-      <button onClick={() => randomizeField('customDetails')}>Randomize</button>
-
-      <br />
-
-      <button onClick={handleSubmit}>Submit</button>
-      <button onClick={randomizeAll}>Randomize All</button>
+   <div className="container">
+      <Header />
+      <div style={{ border: '1px solid #000', padding: '10px', boxShadow: '0px 0px 10px #000', maxWidth: '400px', margin: '0 auto' }}>
+        {Object.keys(formData).map((field, index) => (
+          <div className="form-group" key={index}>
+            <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
+            <div className="input-group">
+              <input 
+                type="text" 
+                className="form-control" 
+                value={formData[field]} 
+                onChange={(e) => setFormData({...formData, [field]: e.target.value})}
+              />
+              <div className="input-group-append">
+                <button className="btn btn-outline-secondary" type="button" onClick={() => randomizeField(field)}>Randomize</button>
+              </div>
+            </div>
+          </div>
+        ))}
+        <div>
+          <button className="btn btn-primary" type="button" onClick={handleSubmit}>Submit</button>
+          <button className="btn btn-secondary ml-2" type="button" onClick={randomizeAll}>Randomize All</button>
+        </div>
+      </div>
     </div>
   );
 }
