@@ -11,10 +11,19 @@ function CreateNew() {
 
   const randomizeField = (field) => {
     const randomValues = {
-      race: ['Human', 'Elf', 'Dwarf', 'Orc'],
-      class: ['Warrior', 'Mage', 'Rogue', 'Priest'],
+       race: [
+      'Human', 'Elf', 'Dwarf', 'Orc', 'Goblin', 'Troll', 'Halfling',
+      'Gnome', 'Undead', 'Minotaur', 'Centaur', 'Fairy', 'Merfolk', 'Dragonkin'
+    ],
+       class: [
+      'Warrior', 'Mage', 'Rogue', 'Priest', 'Druid', 'Warlock', 'Paladin',
+      'Hunter', 'Monk', 'Bard', 'Necromancer', 'Summoner', 'Alchemist', 'Sorcerer'
+    ],
       gender: ['Male', 'Female', 'Non-binary', 'Other'],
-      customDetails: ['Detail1', 'Detail2', 'Detail3', 'Detail4'],
+        personality: [
+      'Brave', 'Wise', 'Mysterious', 'Charming', 'Resourceful', 'Honorable',
+      'Loyal', 'Adventurous', 'Stoic', 'Eloquent', 'Fearless', 'Empathic', 'Cunning', 'Resilient'
+    ]
     };
 
     setFormData({
