@@ -6,7 +6,7 @@ function CreateNew() {
     race: '',
     class: '',
     gender: '',
-    customDetails: '',
+    personality: '',
   });
 
   const randomizeField = (field) => {
@@ -25,17 +25,26 @@ function CreateNew() {
 
 const randomizeAll = () => {
   const randomValues = {
-    race: ['Human', 'Elf', 'Dwarf', 'Orc'],
-    class: ['Warrior', 'Mage', 'Rogue', 'Priest'],
+     race: [
+      'Human', 'Elf', 'Dwarf', 'Orc', 'Goblin', 'Troll', 'Halfling',
+      'Gnome', 'Undead', 'Minotaur', 'Centaur', 'Fairy', 'Merfolk', 'Dragonkin'
+    ],
+     class: [
+      'Warrior', 'Mage', 'Rogue', 'Priest', 'Druid', 'Warlock', 'Paladin',
+      'Hunter', 'Monk', 'Bard', 'Necromancer', 'Summoner', 'Alchemist', 'Sorcerer'
+    ],
     gender: ['Male', 'Female', 'Non-binary', 'Other'],
-    customDetails: ['Detail1', 'Detail2', 'Detail3', 'Detail4'],
+     personality: [
+      'Brave', 'Wise', 'Mysterious', 'Charming', 'Resourceful', 'Honorable',
+      'Loyal', 'Adventurous', 'Stoic', 'Eloquent', 'Fearless', 'Empathic', 'Cunning', 'Resilient'
+    ]
   };
 
   setFormData({
     race: randomValues.race[Math.floor(Math.random() * randomValues.race.length)],
     class: randomValues.class[Math.floor(Math.random() * randomValues.class.length)],
     gender: randomValues.gender[Math.floor(Math.random() * randomValues.gender.length)],
-    customDetails: randomValues.customDetails[Math.floor(Math.random() * randomValues.customDetails.length)],
+    personality: randomValues.personality[Math.floor(Math.random() * randomValues.personality.length)],
   });
 };
 
@@ -99,6 +108,7 @@ const randomizeAll = () => {
           <button className="btn btn-primary btn-block mt-2">Generate Story</button>
          </div>
       </div>
+       <button className="btn btn-primary btn-block mt-3">Publish Character</button>
     </div>
   </div>
     </div>
