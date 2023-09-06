@@ -1,6 +1,11 @@
 import Header from './Header';
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
+const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+const OPENAI_API_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
+const OPENAI_MODEL = 'gpt-3.5-turbo-0613';
+
 function CreateNew() {
   const [formData, setFormData] = useState({
     race: '',
@@ -8,7 +13,8 @@ function CreateNew() {
     gender: '',
     personality: '',
   });
-
+  const [generatedStory, setGeneratedStory] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const randomizeField = (field) => {
     const randomValues = {
        race: [
@@ -31,7 +37,36 @@ function CreateNew() {
       [field]: randomValues[field][Math.floor(Math.random() * randomValues[field].length)],
     });
   };
+  const generateStory = async () => {
+    setIsLoading(true);
+  
+    try {
+      const maxTokens = 150; 
+      const prompt = `Generate a unique backstory for ${formData.name}, a ${formData.gender} ${formData.race} ${formData.alignment} ${formData.class} character with a ${formData.personality} alignment in a fantasy setting in a unique place.`;
+      const response = await axios.post(OPENAI_API_ENDPOINT, {
+        model: OPENAI_MODEL,
+        messages: [{ role: 'system', content: 'You are a helpful assistant.' }, { role: 'user', content: prompt }],
+        max_tokens: maxTokens,
+      }, {
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log('API Response:', response); // Logs the API response for debugging
+  
+      let generatedStory = response.data.choices[0].message.content;
+      setGeneratedStory(generatedStory);
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  const regenerateStory = () => {
+    generateStory();
+  };
 const randomizeAll = () => {
   const randomValues = {
      race: [
