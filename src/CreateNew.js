@@ -48,7 +48,7 @@ const randomizeAll = () => {
    <div className="container">
          <div className="row">
       <div className="col-md-6">
-      <div style={{ border: '1px solid #000', padding: '10px', boxShadow: '0px 0px 10px #000', maxWidth: '400px', margin: '0 auto' }}>
+      <div style={{ border: '1px solid #000',background:'#fff',  padding: '10px', boxShadow: '0px 0px 10px #000', maxWidth: '400px', margin: '0 auto' }}>
        <div className="form-group">
           <label>Enter Name</label>
           <input 
@@ -87,14 +87,14 @@ const randomizeAll = () => {
       </div>
     </div>
 
-      <div className="col-md-6">
-       <div style={{ border: '1px solid #000', padding: '10px', boxShadow: '0px 0px 10px #000', marginBottom: '10px' }}>
+      <div className="col-md-5">
+       <div style={{ background:'#fff', border: '1px solid #000', padding: '10px', boxShadow: '0px 0px 10px #000', marginBottom: '10px' }}>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '250px', border: '1px solid #ccc' }}>
             <img src="" alt="Placeholder" style={{ width: '250px', height: '250px' }} />
           </div>
           <button className="btn btn-primary btn-block">Create Image</button>
         </div>
-        <div style={{ border: '1px solid #000', padding: '10px', boxShadow: '0px 0px 10px #000' }}>
+        <div style={{background:'#fff',  border: '1px solid #000', padding: '10px', boxShadow: '0px 0px 10px #000' }}>
           <textarea className="form-control" rows="4" placeholder="Your story here..."></textarea>
           <button className="btn btn-primary btn-block mt-2">Generate Story</button>
          </div>
