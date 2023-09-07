@@ -135,6 +135,7 @@ race:"",
   const handleSubmit = () => {
     console.log('Form Submitted', formData);
   };
+  
   const handleCreateButtonClick = async () => {
     try {
       const imageElement = document.querySelector('img[alt="Placeholder"]');
@@ -229,7 +230,7 @@ const handleSaveButtonClick = () => {
           </div>
         <div style={{background:'#fff',  border: '1px solid #000', padding: '10px', boxShadow: '0px 0px 10px #000' }}>
          <textarea className="form-control" rows="4" placeholder="Your story here..." value={generatedStory} ></textarea>
-          <button onClick={backstory} disabled={isLoading} className="btn btn-primary btn-block mt-2" > {isLoading ? 'Generating...' : 'Generate Story'} </button>
+          <button onClick={generateStory} disabled={isLoading} className="btn btn-primary btn-block mt-2" > {isLoading ? 'Generating...' : 'Generate Story'} </button>
          </div>
       </div>
       <button onClick={handleCreateButtonClick} className="btn btn-primary btn-block mt-3">Save Character</button>
