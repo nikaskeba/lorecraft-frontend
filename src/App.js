@@ -12,6 +12,10 @@ import AuthButtons from './auth/AuthButtons';
 import { withAuth0 } from '@auth0/auth0-react';
 
 
+const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+const OPENAI_API_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
+const OPENAI_IMAGE_API_ENDPOINT = 'https://api.openai.com/v1/images/generations';
+const OPENAI_MODEL = 'gpt-3.5-turbo-0613';
 class App extends Component {
   constructor(props) {
     super(props);
