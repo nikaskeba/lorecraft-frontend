@@ -41,12 +41,12 @@ function CreateNew() {
     setIsLoading(true);
   
     try {
-      const maxTokens = 150; 
-      const prompt = `Generate a unique backstory for ${formData.name}, a ${formData.gender} ${formData.race} ${formData.alignment} ${formData.class} character with a ${formData.personality} alignment in a fantasy setting in a unique place.`;
+      // const maxTokens = 300; 
+      const prompt = `Generate a concise unique backstory for ${formData.name}, a ${formData.gender} ${formData.race} ${formData.class} character with a ${formData.personality} alignment in a fantasy setting in a unique place. Limit the length to around 200 words.`;
       const response = await axios.post(OPENAI_API_ENDPOINT, {
         model: OPENAI_MODEL,
         messages: [{ role: 'system', content: 'You are a helpful assistant.' }, { role: 'user', content: prompt }],
-        max_tokens: maxTokens,
+        max_tokens: 500,
       }, {
         headers: {
           'Authorization': `Bearer ${apiKey}`,
@@ -67,6 +67,7 @@ function CreateNew() {
   const regenerateStory = () => {
     generateStory();
   };
+
 const randomizeAll = () => {
   const randomValues = {
      race: [
@@ -148,8 +149,9 @@ const randomizeAll = () => {
           <button className="btn btn-primary btn-block">Create Image</button>
         </div>
         <div style={{background:'#fff',  border: '1px solid #000', padding: '10px', boxShadow: '0px 0px 10px #000' }}>
-          <textarea className="form-control" rows="4" placeholder="Your story here..."></textarea>
-          <button className="btn btn-primary btn-block mt-2">Generate Story</button>
+          
+         <textarea className="form-control" rows="4" placeholder="Your story here..." value={generatedStory} ></textarea>
+          <button onClick={generateStory} disabled={isLoading} className="btn btn-primary btn-block mt-2" > {isLoading ? 'Generating...' : 'Generate Story'} </button>
          </div>
       </div>
        <button className="btn btn-primary btn-block mt-3">Publish Character</button>
