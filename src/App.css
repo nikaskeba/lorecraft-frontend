@@ -1,6 +1,7 @@
 .App {
   text-align: center;
 } 
+.carousel-item {    background: white;}
 body {
   background-image: url('./floor.png');
   background-repeat: repeat;
@@ -27,7 +28,9 @@ body {
   font-size: calc(10px + 2vmin);
   color: white;
 }
-
+.carousel-control-prev{background:black;}
+.carousel-control-next{background:black;}
+.carousel-indicators{background:black;}
 .App-link {
   color: #61dafb;
 }

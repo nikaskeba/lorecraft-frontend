@@ -1,7 +1,8 @@
 import Header from './Header';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import Carousel from 'react-bootstrap/Carousel';
+import 'bootstrap/dist/css/bootstrap.min.css';
 const Creations = () => {
   const [characters, setCharacters] = useState([]);
 
@@ -21,28 +22,29 @@ const Creations = () => {
     fetchAllCharacters();
   }, []);
 
-  return (
+   return (
     <div>
       <Header />
       {characters.length === 0 ? (
         <p>No characters found</p>
       ) : (
-        characters.map((character, index) => (
-          <div key={index}>
-         
-            <p>Char Name: {character.charName}</p>
-            <p>Class Type: {character.classType}</p>
-            <p>Alignment: {character.alignment}</p>
-            <p>Gender: {character.gender}</p>
-            <p>Image URL: {character.imageURL}</p>
-            <p>Backstory: {character.backstory}</p>
-          </div>
-        ))
+        <Carousel>
+          {characters.map((character, index) => (
+            <Carousel.Item key={index}>
+              <div>
+                <h5>Char Name: {character.charName}</h5>
+                <p>Class Type: {character.classType}</p>
+                <p>Alignment: {character.alignment}</p>
+                <p>Gender: {character.gender}</p>
+                <p>Image URL: {character.imageURL}</p>
+                <p>Backstory: {character.backstory}</p>
+              </div>
+            </Carousel.Item>
+          ))}
+        </Carousel>
       )}
     </div>
   );
 };
 
 export default Creations;
-
-
