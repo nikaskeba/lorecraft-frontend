@@ -15,6 +15,8 @@ function CreateNew() {
   });
   const [generatedStory, setGeneratedStory] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
+
   const randomizeField = (field) => {
     const randomValues = {
        race: [
