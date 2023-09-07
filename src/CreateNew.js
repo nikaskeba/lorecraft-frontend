@@ -165,10 +165,12 @@ const handleCreateButtonClick = async () => {
     const response = await axios.post('https://lorecraft.onrender.com/character', characterData);
 
     // Handle the response from the server (you might want to display a success message or handle errors)
-    if (response.status === 200) {
-      console.log('Character created successfully');
-      // ... (other success handling code)
-    } else {
+if (response.status === 201) {
+  console.log('Character created successfully');
+  // ... (other success handling code)
+}
+
+    else {
       console.error('Failed to create character');
       // ... (other error handling code)
     }
@@ -200,7 +202,8 @@ const handleCreateButtonClick = async () => {
 
           />
         </div>
-        {Object.keys(formData).map((field, index) => (
+
+        {Object.keys(formData).filter(field => field !== 'charName').map((field, index) => (
           <div className="form-group" key={index}>
             <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
             <div className="input-group">
