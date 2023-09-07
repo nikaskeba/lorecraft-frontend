@@ -63,7 +63,7 @@ const [imageURL, setImageURL] = useState("");
     setIsLoading(true);
   
     try {
-      const prompt = `Generate a concise unique backstory for ${formData.name}, a ${formData.gender} ${formData.race} ${formData.class} character with a ${formData.personality} alignment in a fantasy setting in a unique place. Limit the length to around 200 words.`;
+      const prompt = `Generate a concise unique backstory for ${formData.name}, a ${formData.gender} ${formData.race} ${formData.classType} character with a ${formData.personality} alignment in a fantasy setting in a unique place. Limit the length to around 200 words.`;
       const response = await axios.post(OPENAI_API_ENDPOINT, {
         model: OPENAI_MODEL,
         messages: [{ role: 'system', content: 'You are a helpful assistant.' }, { role: 'user', content: prompt }],
@@ -92,7 +92,7 @@ const [imageURL, setImageURL] = useState("");
         OPENAI_IMAGE_API_ENDPOINT,
         {
           model: 'image-alpha-001', 
-          prompt: `Create a high-quality portrait of a ${formData.gender} ${formData.race} ${formData.class} character with a ${formData.personality} alignment in a realistic fantasy setting. Please provide an image with a high resolution`,
+          prompt: `Create a high-quality portrait of a ${formData.gender} ${formData.race} ${formData.classType} character with a ${formData.personality} alignment in a realistic fantasy setting. Please provide an image with a high resolution`,
           n: 1,
           size: '256x256',
         },
