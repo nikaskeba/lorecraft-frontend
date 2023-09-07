@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
 const OPENAI_API_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
-const OPENAI_IMAGE_API_ENDPOINT = 'https://api.openai.com/v1/images/generate';
+const OPENAI_IMAGE_API_ENDPOINT = 'https://api.openai.com/v1/images/generations';
 const OPENAI_MODEL = 'gpt-3.5-turbo-0613';
 
 
@@ -19,6 +19,7 @@ function CreateNew() {
 
   const [generatedStory, setGeneratedStory] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingImg, setIsLoadingImg] = useState(false);
   const [generatedImage, setGeneratedImage] = useState(null);
 
   const randomizeField = (field) => {
@@ -70,14 +71,14 @@ function CreateNew() {
   };
 
   const generateImage = async () => {
-    setIsLoading(true);
+    setIsLoadingImg(true);
   
     try {
       const response = await axios.post(
         OPENAI_IMAGE_API_ENDPOINT,
         {
           model: 'image-alpha-001', 
-          prompt: `Create an image of a ${formData.gender} ${formData.race} ${formData.class} character with a ${formData.personality} alignment in a fantasy setting`,
+          prompt: `Create a high-quality portrait of a ${formData.gender} ${formData.race} ${formData.class} character with a ${formData.personality} alignment in a realistic fantasy setting. Please provide an image with a high resolution`,
           n: 1,
           size: '256x256',
         },
@@ -94,7 +95,7 @@ function CreateNew() {
     } catch (error) {
       console.error('Error:', error);
     } finally {
-      setIsLoading(false);
+      setIsLoadingImg(false);
     }
   };
   
@@ -175,14 +176,14 @@ const randomizeAll = () => {
     </div>
 
       <div className="col-md-5">
-       <div style={{ background:'#fff', border: '1px solid #000', padding: '10px', boxShadow: '0px 0px 10px #000', marginBottom: '10px' }}>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '250px', border: '1px solid #ccc' }}>
+       <div style={{ background:'#fff', border: '1px solid #000', padding: '30px', boxShadow: '0px 0px 10px #000', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '256px', border: '1px solid #ccc' }}>
           {generatedImage && (
-            <img src={generatedImage} alt="Generated Character" style={{ width: '100%' }} />
+            <img src={generatedImage} alt="Generated Character" style={{ width: '256px' }} />
           )}
           </div>
-            <button className="btn btn-primary btn-block" onClick={generateImage} disabled={isLoading}>
-                {isLoading ? 'Generating Image...' : 'Generate Image'}
+            <button style={{marginTop: '20px'}}className="btn btn-primary btn-block" onClick={generateImage} disabled={isLoadingImg}>
+                {isLoadingImg ? 'Generating Image...' : 'Generate Image'}
             </button>       
           </div>
         <div style={{background:'#fff',  border: '1px solid #000', padding: '10px', boxShadow: '0px 0px 10px #000' }}>

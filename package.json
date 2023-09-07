@@ -2,6 +2,7 @@
   "name": "a_quiz_generator",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3000",
   "dependencies": {
     "@leecheuk/react-google-login": "^5.4.1",
     "@react-oauth/google": "^0.11.1",
@@ -10,6 +11,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.5.0",
     "bootstrap": "^5.3.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "node-fetch": "^3.3.2",
     "openai": "^4.5.0",
@@ -20,7 +22,6 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
-  "proxy": "https://api.openai.com",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
