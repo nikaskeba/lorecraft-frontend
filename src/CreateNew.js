@@ -5,9 +5,9 @@ import axios from 'axios';
 import { withAuth0 } from '@auth0/auth0-react';
 import { useAuth0 } from '@auth0/auth0-react';
 
-
 const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
 const OPENAI_API_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
+const OPENAI_IMAGE_API_ENDPOINT = 'https://api.openai.com/v1/images/generations';
 const OPENAI_MODEL = 'gpt-3.5-turbo-0613';
 
 function CreateNew() {
@@ -20,11 +20,19 @@ race:"",
     gender: '',
   });
 
+  const [imageUrl, setImageUrl] = useState('');
+const [charName, setCharName] = useState("");
+const [classType, setClassType] = useState("");
+const [alignment, setAlignment] = useState("");
+const [gender, setGender] = useState("");
+const [imageURL, setImageURL] = useState("");
   const [generatedStory, setGeneratedStory] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState('');
+  const [isLoadingImg, setIsLoadingImg] = useState(false);
+  const [generatedImage, setGeneratedImage] = useState(null);
 
-  const randomizeField = (field) => {
+
+   const randomizeField = (field) => {
     const randomValues = {
        race: [
       'Human', 'Elf', 'Dwarf', 'Orc', 'Goblin', 'Troll', 'Halfling',
@@ -40,17 +48,19 @@ race:"",
       'Loyal', 'Adventurous', 'Stoic', 'Eloquent', 'Fearless', 'Empathic', 'Cunning', 'Resilient'
     ]
     };
-
+   
+     
     setFormData({
       ...formData,
       [field]: randomValues[field][Math.floor(Math.random() * randomValues[field].length)],
+
     });
+
   };
   const backstory = async () => {
     setIsLoading(true);
   
     try {
-      // const maxTokens = 300; 
       const prompt = `Generate a concise unique backstory for ${formData.name}, a ${formData.gender} ${formData.race} ${formData.class} character with a ${formData.personality} alignment in a fantasy setting in a unique place. Limit the length to around 200 words.`;
       const response = await axios.post(OPENAI_API_ENDPOINT, {
         model: OPENAI_MODEL,
@@ -62,7 +72,6 @@ race:"",
           'Content-Type': 'application/json',
         },
       });
-      console.log('API Response:', response); // Logs the API response for debugging
   
       let generatedStory = response.data.choices[0].message.content;
       setGeneratedStory(generatedStory);
@@ -73,8 +82,33 @@ race:"",
     }
   };
 
-  const regenerateStory = () => {
-    backstory();
+  const generateImage = async () => {
+    setIsLoadingImg(true);
+  
+    try {
+      const response = await axios.post(
+        OPENAI_IMAGE_API_ENDPOINT,
+        {
+          model: 'image-alpha-001', 
+          prompt: `Create a high-quality portrait of a ${formData.gender} ${formData.race} ${formData.class} character with a ${formData.personality} alignment in a realistic fantasy setting. Please provide an image with a high resolution`,
+          n: 1,
+          size: '256x256',
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      const generatedImageUrl = response.data.data[0].url;
+      setGeneratedImage(generatedImageUrl); 
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setIsLoadingImg(false);
+    }
   };
   const userData = () => {
     return user ? user.email : null;
@@ -98,7 +132,7 @@ race:"",
 
     setFormData({
       race: randomValues.race[Math.floor(Math.random() * randomValues.race.length)],
-      classType: randomValues.class[Math.floor(Math.random() * randomValues.class.length)],
+      classType: randomValues.classType[Math.floor(Math.random() * randomValues.classType.length)],
       gender: randomValues.gender[Math.floor(Math.random() * randomValues.gender.length)],
       alignment: randomValues.alignment[Math.floor(Math.random() * randomValues.alignment.length)],
     });
@@ -116,7 +150,7 @@ race:"",
         generatedStory: generatedStory, // or directly from backstory.value if necessary
         imageUrl: imageElement ? imageElement.src : ''
       };
-      const response = await axios.post('YOUR_SERVER_URL/character', characterData);
+      const response = await axios.post('https://lorecraft.onrender.com/character', characterData);
       console.log('Character created:', response.data);
     } catch (error) {
       console.error('Error creating character:', error);
@@ -130,13 +164,13 @@ const handleSaveButtonClick = () => {
     classType: formData.classType,
     alignment: formData.alignment,
     gender: formData.gender,
-    imageURL: formData.imageURL,
-    backstory: formData.backstory,
-    userEmail: user ? user.email : "",
+    imageURL: "image.png",
+    backstory: generatedStory,
+    userEmail: userData(),
   };
 
   // Send the JSON object to the required endpoint using axios
-  axios.post('YOUR_API_ENDPOINT_HERE', jsonData)
+axios.post('https://lorecraft.onrender.com/character', jsonData)
     .then(response => {
       console.log('Response:', response.data);
     })
