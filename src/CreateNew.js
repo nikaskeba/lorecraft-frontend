@@ -5,9 +5,9 @@ import axios from 'axios';
 import { withAuth0 } from '@auth0/auth0-react';
 import { useAuth0 } from '@auth0/auth0-react';
 
-
 const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
 const OPENAI_API_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
+const OPENAI_IMAGE_API_ENDPOINT = 'https://api.openai.com/v1/images/generations';
 const OPENAI_MODEL = 'gpt-3.5-turbo-0613';
 
 function CreateNew() {
@@ -22,6 +22,8 @@ race:"",
 
   const [generatedStory, setGeneratedStory] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingImg, setIsLoadingImg] = useState(false);
+  const [generatedImage, setGeneratedImage] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
 
   const randomizeField = (field) => {
@@ -46,11 +48,11 @@ race:"",
       [field]: randomValues[field][Math.floor(Math.random() * randomValues[field].length)],
     });
   };
-  const backstory = async () => {
+
+  const generateStory = async () => {
     setIsLoading(true);
   
     try {
-      // const maxTokens = 300; 
       const prompt = `Generate a concise unique backstory for ${formData.name}, a ${formData.gender} ${formData.race} ${formData.class} character with a ${formData.personality} alignment in a fantasy setting in a unique place. Limit the length to around 200 words.`;
       const response = await axios.post(OPENAI_API_ENDPOINT, {
         model: OPENAI_MODEL,
@@ -62,7 +64,6 @@ race:"",
           'Content-Type': 'application/json',
         },
       });
-      console.log('API Response:', response); // Logs the API response for debugging
   
       let generatedStory = response.data.choices[0].message.content;
       setGeneratedStory(generatedStory);
@@ -73,12 +74,39 @@ race:"",
     }
   };
 
-  const regenerateStory = () => {
-    backstory();
+  const generateImage = async () => {
+    setIsLoadingImg(true);
+  
+    try {
+      const response = await axios.post(
+        OPENAI_IMAGE_API_ENDPOINT,
+        {
+          model: 'image-alpha-001', 
+          prompt: `Create a high-quality portrait of a ${formData.gender} ${formData.race} ${formData.class} character with a ${formData.personality} alignment in a realistic fantasy setting. Please provide an image with a high resolution`,
+          n: 1,
+          size: '256x256',
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      const generatedImageUrl = response.data.data[0].url;
+      setGeneratedImage(generatedImageUrl); 
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setIsLoadingImg(false);
+    }
   };
+  
   const userData = () => {
     return user ? user.email : null;
   };
+  
   const randomizeAll = () => {
     const randomValues = {
       race: [
@@ -189,14 +217,17 @@ const handleSaveButtonClick = () => {
     </div>
 
       <div className="col-md-5">
-       <div style={{ background:'#fff', border: '1px solid #000', padding: '10px', boxShadow: '0px 0px 10px #000', marginBottom: '10px' }}>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '250px', border: '1px solid #ccc' }}>
-            <img src="" alt="Placeholder" style={{ width: '250px', height: '250px' }} />
+       <div style={{ background:'#fff', border: '1px solid #000', padding: '30px', boxShadow: '0px 0px 10px #000', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '256px', border: '1px solid #ccc' }}>
+          {generatedImage && (
+            <img src={generatedImage} alt="Generated Character" style={{ width: '256px' }} />
+          )}
           </div>
-          <button className="btn btn-primary btn-block">Create Image</button>
-        </div>
+            <button style={{marginTop: '20px'}}className="btn btn-primary btn-block" onClick={generateImage} disabled={isLoadingImg}>
+                {isLoadingImg ? 'Generating Image...' : 'Generate Image'}
+            </button>       
+          </div>
         <div style={{background:'#fff',  border: '1px solid #000', padding: '10px', boxShadow: '0px 0px 10px #000' }}>
-          
          <textarea className="form-control" rows="4" placeholder="Your story here..." value={generatedStory} ></textarea>
           <button onClick={backstory} disabled={isLoading} className="btn btn-primary btn-block mt-2" > {isLoading ? 'Generating...' : 'Generate Story'} </button>
          </div>
