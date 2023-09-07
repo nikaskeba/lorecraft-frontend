@@ -32,6 +32,7 @@ const [imageURL, setImageURL] = useState("");
   const [generatedImage, setGeneratedImage] = useState(null);
 
 
+
    const randomizeField = (field) => {
     const randomValues = {
        race: [
@@ -57,7 +58,8 @@ const [imageURL, setImageURL] = useState("");
     });
 
   };
-  const backstory = async () => {
+
+  const generateStory = async () => {
     setIsLoading(true);
   
     try {
@@ -110,9 +112,11 @@ const [imageURL, setImageURL] = useState("");
       setIsLoadingImg(false);
     }
   };
+  
   const userData = () => {
     return user ? user.email : null;
   };
+  
   const randomizeAll = () => {
     const randomValues = {
       race: [
@@ -141,6 +145,7 @@ const [imageURL, setImageURL] = useState("");
   const handleSubmit = () => {
     console.log('Form Submitted', formData);
   };
+  
   const handleCreateButtonClick = async () => {
     try {
       const imageElement = document.querySelector('img[alt="Placeholder"]');
@@ -223,16 +228,19 @@ axios.post('https://lorecraft.onrender.com/character', jsonData)
     </div>
 
       <div className="col-md-5">
-       <div style={{ background:'#fff', border: '1px solid #000', padding: '10px', boxShadow: '0px 0px 10px #000', marginBottom: '10px' }}>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '250px', border: '1px solid #ccc' }}>
-            <img src="" alt="Placeholder" style={{ width: '250px', height: '250px' }} />
+       <div style={{ background:'#fff', border: '1px solid #000', padding: '30px', boxShadow: '0px 0px 10px #000', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '256px', border: '1px solid #ccc' }}>
+          {generatedImage && (
+            <img src={generatedImage} alt="Generated Character" style={{ width: '256px' }} />
+          )}
           </div>
-          <button className="btn btn-primary btn-block">Create Image</button>
-        </div>
+            <button style={{marginTop: '20px'}}className="btn btn-primary btn-block" onClick={generateImage} disabled={isLoadingImg}>
+                {isLoadingImg ? 'Generating Image...' : 'Generate Image'}
+            </button>       
+          </div>
         <div style={{background:'#fff',  border: '1px solid #000', padding: '10px', boxShadow: '0px 0px 10px #000' }}>
-          
          <textarea className="form-control" rows="4" placeholder="Your story here..." value={generatedStory} ></textarea>
-          <button onClick={backstory} disabled={isLoading} className="btn btn-primary btn-block mt-2" > {isLoading ? 'Generating...' : 'Generate Story'} </button>
+          <button onClick={generateStory} disabled={isLoading} className="btn btn-primary btn-block mt-2" > {isLoading ? 'Generating...' : 'Generate Story'} </button>
          </div>
       </div>
       <button onClick={handleCreateButtonClick} className="btn btn-primary btn-block mt-3">Save Character</button>
