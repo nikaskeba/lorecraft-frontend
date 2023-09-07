@@ -146,68 +146,63 @@ const [imageURL, setImageURL] = useState("");
     console.log('Form Submitted', formData);
   };
   
-  const handleCreateButtonClick = async () => {
-    try {
-      const imageElement = document.querySelector('img[alt="Placeholder"]');
-      const backstory = document.querySelector('textarea[placeholder="Your story here..."]');
-      const characterData = {
-        ...formData,
-        generatedStory: generatedStory, // or directly from backstory.value if necessary
-        imageUrl: imageElement ? imageElement.src : ''
-      };
-      const response = await axios.post('https://lorecraft.onrender.com/character', characterData);
-      console.log('Character created:', response.data);
-    } catch (error) {
-      console.error('Error creating character:', error);
+const handleCreateButtonClick = async () => {
+  try {
+    // Collect the data from the state variables
+       const characterData = {
+      userEmail: user.email,  // Assuming 'user' contains the email information
+  charName: formData.charName, 
+  classType: formData.classType, 
+  alignment: formData.alignment, 
+  gender: formData.gender, 
+  imageURL: "placeholder.png", 
+  backstory: "backstory",
+    };
+
+    // Log the data to be sent (add this line to debug the data)
+    console.log('Data to be sent:', characterData);
+    // Send the data to the server using a POST request
+    const response = await axios.post('https://lorecraft.onrender.com/character', characterData);
+
+    // Handle the response from the server (you might want to display a success message or handle errors)
+    if (response.status === 201) {
+      console.log('Character created successfully');
+      // ... (other success handling code)
+    } else {
+      console.error('Failed to create character');
+      // ... (other error handling code)
     }
-  };
-
-const handleSaveButtonClick = () => {
-  // Construct the JSON object from the formData state
-  const jsonData = {
-    charName: formData.charName,
-    classType: formData.classType,
-    alignment: formData.alignment,
-    gender: formData.gender,
-    imageURL: "image.png",
-    backstory: generatedStory,
-    userEmail: userData(),
-  };
-
-  // Send the JSON object to the required endpoint using axios
-axios.post('https://lorecraft.onrender.com/character', jsonData)
-    .then(response => {
-      console.log('Response:', response.data);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+  } catch (error) {
+    console.error('Error creating character:', error);
+    // ... (other error handling code)
+  }
 };
+
   return (
 <div><Header />
    <div className="container">
          <div className="row">
       <div className="col-md-6">
       <div style={{ border: '1px solid #000',background:'#fff',  padding: '10px', boxShadow: '0px 0px 10px #000', maxWidth: '400px', margin: '0 auto' }}>
-       <div className="form-group">
-          <label>Enter Name</label>
-          <input 
-            type="text" 
-            className="form-control" 
-            value={formData.charName} 
-            onChange={(e) => setFormData({...formData, name: e.target.value})}
-          />
-        </div>
-        {Object.keys(formData).map((field, index) => (
-          <div className="form-group" key={index}>
-            <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
-            <div className="input-group">
-              <input 
-                type="text" 
-                className="form-control" 
-                value={formData[field]} 
-                onChange={(e) => setFormData({...formData, [field]: e.target.value})}
-              />
+   <div className="form-group">
+  <label>Enter Name</label>
+  <input 
+    type="text" 
+    className="form-control" 
+    value={formData.charName} 
+    onChange={(e) => setFormData({...formData, charName: e.target.value})}
+  />
+</div>
+{Object.keys(formData).filter(field => field !== 'charName').map((field, index) => (
+  <div className="form-group" key={index}>
+    <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
+    <div className="input-group">
+      <input 
+        type="text" 
+        className="form-control" 
+        value={formData[field]} 
+        onChange={(e) => setFormData({...formData, [field]: e.target.value})}
+      />
               <div className="input-group-append">
                 <button className="btn btn-outline-secondary" type="button" onClick={() => randomizeField(field)}> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shuffle" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M0 3.5A.5.5 0 0 1 .5 3H1c2.202 0 3.827 1.24 4.874 2.418.49.552.865 1.102 1.126 1.532.26-.43.636-.98 1.126-1.532C9.173 4.24 10.798 3 13 3v1c-1.798 0-3.173 1.01-4.126 2.082A9.624 9.624 0 0 0 7.556 8a9.624 9.624 0 0 0 1.317 1.918C9.828 10.99 11.204 12 13 12v1c-2.202 0-3.827-1.24-4.874-2.418A10.595 10.595 0 0 1 7 9.05c-.26.43-.636.98-1.126 1.532C4.827 11.76 3.202 13 1 13H.5a.5.5 0 0 1 0-1H1c1.798 0 3.173-1.01 4.126-2.082A9.624 9.624 0 0 0 6.444 8a9.624 9.624 0 0 0-1.317-1.918C4.172 5.01 2.796 4 1 4H.5a.5.5 0 0 1-.5-.5z"/>
