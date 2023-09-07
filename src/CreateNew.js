@@ -96,14 +96,21 @@ const randomizeAll = () => {
   const handleSubmit = () => {
     console.log('Form Submitted', formData);
   };
-  const handleCreateButtonClick = async () => {
-    try {
-      const response = await axios.post('YOUR_SERVER_URL/character', formData);
-      console.log('Character created:', response.data);
-    } catch (error) {
-      console.error('Error creating character:', error);
-    }
-  };
+const handleCreateButtonClick = async () => {
+  try {
+    const imageElement = document.querySelector('img[alt="Placeholder"]');
+    const storyElement = document.querySelector('textarea[placeholder="Your story here..."]');
+    const characterData = {
+      ...formData,
+      generatedStory: generatedStory, // or directly from storyElement.value if necessary
+      imageUrl: imageElement ? imageElement.src : ''
+    };
+    const response = await axios.post('YOUR_SERVER_URL/character', characterData);
+    console.log('Character created:', response.data);
+  } catch (error) {
+    console.error('Error creating character:', error);
+  }
+};
   return (
 <div><Header />
    <div className="container">
