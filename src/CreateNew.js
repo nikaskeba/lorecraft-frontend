@@ -95,7 +95,14 @@ const randomizeAll = () => {
   const handleSubmit = () => {
     console.log('Form Submitted', formData);
   };
-
+  const handleCreateButtonClick = async () => {
+    try {
+      const response = await axios.post('YOUR_SERVER_URL/character', formData);
+      console.log('Character created:', response.data);
+    } catch (error) {
+      console.error('Error creating character:', error);
+    }
+  };
   return (
 <div><Header />
    <div className="container">
@@ -152,7 +159,7 @@ const randomizeAll = () => {
           <button className="btn btn-primary btn-block mt-2">Generate Story</button>
          </div>
       </div>
-       <button className="btn btn-primary btn-block mt-3">Publish Character</button>
+      <button onClick={handleCreateButtonClick} className="btn btn-primary btn-block mt-3">Publish Character</button>
     </div>
   </div>
     </div>
