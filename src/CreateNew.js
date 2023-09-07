@@ -146,46 +146,43 @@ const [imageURL, setImageURL] = useState("");
     console.log('Form Submitted', formData);
   };
   
-const handleCreateButtonClick = async () => {
-  try {
-    // Collect the data from the state variables
-       const characterData = {
-      userEmail: user.email,  // Assuming 'user' contains the email information
-  charName: formData.charName, 
-  classType: formData.classType, 
-  alignment: formData.alignment, 
-  gender: formData.gender, 
-  imageURL: "placeholder.png", 
-  backstory: "backstory",
-    };
-
-    // Log the data to be sent (add this line to debug the data)
-    console.log('Data to be sent:', characterData);
-    // Send the data to the server using a POST request
-    const response = await axios.post('https://lorecraft.onrender.com/character', characterData);
-
-    // Handle the response from the server (you might want to display a success message or handle errors)
-if (response.status === 201) {
-  console.log('Character created successfully');
-  // ... (other success handling code)
-}
-
-    else {
-      console.error('Failed to create character');
-      // ... (other error handling code)
+  const handleCreateButtonClick = async () => {
+    try {
+      const imageElement = document.querySelector('img[alt="Placeholder"]');
+      const backstory = document.querySelector('textarea[placeholder="Your story here..."]');
+      const characterData = {
+        ...formData,
+        generatedStory: generatedStory, // or directly from backstory.value if necessary
+        imageUrl: imageElement ? imageElement.src : ''
+      };
+      const response = await axios.post('https://lorecraft.onrender.com/character', characterData);
+      console.log('Character created:', response.data);
+    } catch (error) {
+      console.error('Error creating character:', error);
     }
-  } catch (error) {
-    console.error('Error creating character:', error);
-    // ... (other error handling code)
-  }
+  };
+
+const handleSaveButtonClick = () => {
+  // Construct the JSON object from the formData state
+  const jsonData = {
+    charName: formData.charName,
+    classType: formData.classType,
+    alignment: formData.alignment,
+    gender: formData.gender,
+    imageURL: "image.png",
+    backstory: generatedStory,
+    userEmail: userData(),
+  };
+
+  // Send the JSON object to the required endpoint using axios
+axios.post('https://lorecraft.onrender.com/character', jsonData)
+    .then(response => {
+      console.log('Response:', response.data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 };
-
-
-
-
-
-
-
   return (
 <div><Header />
    <div className="container">
@@ -198,12 +195,10 @@ if (response.status === 201) {
             type="text" 
             className="form-control" 
             value={formData.charName} 
-            onChange={(e) => setFormData({...formData, charName: e.target.value})}
-
+            onChange={(e) => setFormData({...formData, name: e.target.value})}
           />
         </div>
-
-        {Object.keys(formData).filter(field => field !== 'charName').map((field, index) => (
+        {Object.keys(formData).map((field, index) => (
           <div className="form-group" key={index}>
             <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
             <div className="input-group">
@@ -248,7 +243,11 @@ if (response.status === 201) {
           <button onClick={generateStory} disabled={isLoading} className="btn btn-primary btn-block mt-2" > {isLoading ? 'Generating...' : 'Generate Story'} </button>
          </div>
       </div>
-      <button onClick={handleCreateButtonClick} className="btn btn-primary btn-block mt-3">Save Character</button>
+      {user 
+          ? <button onClick={handleCreateButtonClick} className="btn btn-primary btn-block mt-3">Save Character </button> 
+          : <button className="btn btn-secondary btn-block mt-3" disabled>Please login before you can save </button>
+        }
+        
     </div>
   </div>
     </div>
