@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { withAuth0 } from '@auth0/auth0-react';
+import { useAuth0 } from '@auth0/auth0-react';
+
 
 const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
 const OPENAI_API_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
@@ -10,11 +12,12 @@ const OPENAI_MODEL = 'gpt-3.5-turbo-0613';
 
 function CreateNew() {
 
+  const { user } = useAuth0();
   const [formData, setFormData] = useState({
-    race: '',
-    class: '',
+race:"",
+  classType: "",
+  alignment: "",
     gender: '',
-    personality: '',
   });
 
   const [generatedStory, setGeneratedStory] = useState('');
@@ -27,12 +30,12 @@ function CreateNew() {
       'Human', 'Elf', 'Dwarf', 'Orc', 'Goblin', 'Troll', 'Halfling',
       'Gnome', 'Undead', 'Minotaur', 'Centaur', 'Fairy', 'Merfolk', 'Dragonkin'
     ],
-       class: [
+       classType: [
       'Warrior', 'Mage', 'Rogue', 'Priest', 'Druid', 'Warlock', 'Paladin',
       'Hunter', 'Monk', 'Bard', 'Necromancer', 'Summoner', 'Alchemist', 'Sorcerer'
     ],
       gender: ['Male', 'Female', 'Non-binary', 'Other'],
-        personality: [
+        alignment: [
       'Brave', 'Wise', 'Mysterious', 'Charming', 'Resourceful', 'Honorable',
       'Loyal', 'Adventurous', 'Stoic', 'Eloquent', 'Fearless', 'Empathic', 'Cunning', 'Resilient'
     ]
@@ -43,7 +46,7 @@ function CreateNew() {
       [field]: randomValues[field][Math.floor(Math.random() * randomValues[field].length)],
     });
   };
-  const generateStory = async () => {
+  const backstory = async () => {
     setIsLoading(true);
   
     try {
@@ -71,21 +74,23 @@ function CreateNew() {
   };
 
   const regenerateStory = () => {
-    generateStory();
+    backstory();
   };
-
+  const userData = () => {
+    return user ? user.email : null;
+  };
   const randomizeAll = () => {
     const randomValues = {
       race: [
         'Human', 'Elf', 'Dwarf', 'Orc', 'Goblin', 'Troll', 'Halfling',
         'Gnome', 'Undead', 'Minotaur', 'Centaur', 'Fairy', 'Merfolk', 'Dragonkin'
       ],
-      class: [
+      classType: [
         'Warrior', 'Mage', 'Rogue', 'Priest', 'Druid', 'Warlock', 'Paladin',
         'Hunter', 'Monk', 'Bard', 'Necromancer', 'Summoner', 'Alchemist', 'Sorcerer'
       ],
       gender: ['Male', 'Female', 'Non-binary', 'Other'],
-      personality: [
+      alignment: [
         'Brave', 'Wise', 'Mysterious', 'Charming', 'Resourceful', 'Honorable',
         'Loyal', 'Adventurous', 'Stoic', 'Eloquent', 'Fearless', 'Empathic', 'Cunning', 'Resilient'
       ]
@@ -93,23 +98,22 @@ function CreateNew() {
 
     setFormData({
       race: randomValues.race[Math.floor(Math.random() * randomValues.race.length)],
-      class: randomValues.class[Math.floor(Math.random() * randomValues.class.length)],
+      classType: randomValues.class[Math.floor(Math.random() * randomValues.class.length)],
       gender: randomValues.gender[Math.floor(Math.random() * randomValues.gender.length)],
-      personality: randomValues.personality[Math.floor(Math.random() * randomValues.personality.length)],
+      alignment: randomValues.alignment[Math.floor(Math.random() * randomValues.alignment.length)],
     });
   };
 
   const handleSubmit = () => {
     console.log('Form Submitted', formData);
   };
-
   const handleCreateButtonClick = async () => {
     try {
       const imageElement = document.querySelector('img[alt="Placeholder"]');
-      const storyElement = document.querySelector('textarea[placeholder="Your story here..."]');
+      const backstory = document.querySelector('textarea[placeholder="Your story here..."]');
       const characterData = {
         ...formData,
-        generatedStory: generatedStory, // or directly from storyElement.value if necessary
+        generatedStory: generatedStory, // or directly from backstory.value if necessary
         imageUrl: imageElement ? imageElement.src : ''
       };
       const response = await axios.post('YOUR_SERVER_URL/character', characterData);
@@ -119,6 +123,27 @@ function CreateNew() {
     }
   };
 
+const handleSaveButtonClick = () => {
+  // Construct the JSON object from the formData state
+  const jsonData = {
+    charName: formData.charName,
+    classType: formData.classType,
+    alignment: formData.alignment,
+    gender: formData.gender,
+    imageURL: formData.imageURL,
+    backstory: formData.backstory,
+    userEmail: user ? user.email : "",
+  };
+
+  // Send the JSON object to the required endpoint using axios
+  axios.post('YOUR_API_ENDPOINT_HERE', jsonData)
+    .then(response => {
+      console.log('Response:', response.data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+};
   return (
 <div><Header />
    <div className="container">
@@ -130,7 +155,7 @@ function CreateNew() {
           <input 
             type="text" 
             className="form-control" 
-            value={formData.name} 
+            value={formData.charName} 
             onChange={(e) => setFormData({...formData, name: e.target.value})}
           />
         </div>
@@ -173,7 +198,7 @@ function CreateNew() {
         <div style={{background:'#fff',  border: '1px solid #000', padding: '10px', boxShadow: '0px 0px 10px #000' }}>
           
          <textarea className="form-control" rows="4" placeholder="Your story here..." value={generatedStory} ></textarea>
-          <button onClick={generateStory} disabled={isLoading} className="btn btn-primary btn-block mt-2" > {isLoading ? 'Generating...' : 'Generate Story'} </button>
+          <button onClick={backstory} disabled={isLoading} className="btn btn-primary btn-block mt-2" > {isLoading ? 'Generating...' : 'Generate Story'} </button>
          </div>
       </div>
       <button onClick={handleCreateButtonClick} className="btn btn-primary btn-block mt-3">Save Character</button>
