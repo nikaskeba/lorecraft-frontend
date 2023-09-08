@@ -4,7 +4,7 @@ import './About.css';
 
 function About() {
   const profiles = [
-    { name: "Person 1", info: "Info about person 1", imgSrc: "./images/Profile1.png" },
+    { name: "Nika", info: "AI Artist, Coding, Design", imgSrc: "./images/Profile1.png" },
     { name: "Paul", info: "Engineer --> Entrepreneur --> Engineer", imgSrc: "./images/Profile2.png" },
     { name: "Person 3", info: "Info about person 3", imgSrc: "./images/Profile3.png" },
   ];
