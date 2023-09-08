@@ -6,11 +6,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {useAuth0 } from '@auth0/auth0-react';
 import Modal from 'react-bootstrap/Modal'; // Import Modal component
 
+
 const SERVER_URL='https://lorecraft.onrender.com'
 // const SERVER_URL='http://localhost:3001'
 
 const Creations = () => {
-  const { user } = useAuth0();
+const { user, getIdTokenClaims } = useAuth0();
   const [editingCharacter, setEditingCharacter] = useState(null);
   const handleEditButtonClick = (character) => {
   console.log('Editing character:', character);
@@ -20,17 +21,23 @@ const Creations = () => {
   const [characters, setCharacters] = useState([]);
 
 const fetchAllCharacters = useCallback(async () => {
-    try {
-      const response = await axios.get(`${SERVER_URL}/character/${user.email}`);
-      if (response.status === 200) {
-        setCharacters(response.data);
-      }
-    } catch (error) {
-      console.error('Error fetching characters:', error);
-      // Here you might set an error state variable to show an error message to the user
-    }
-}, [user.email]);
+  try {
+    const tokenClaims = await getIdTokenClaims();
+    const token = tokenClaims.__raw;
 
+    const response = await axios.get(`${SERVER_URL}/character/${user.email}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 200) {
+      setCharacters(response.data);
+    }
+  } catch (error) {
+    console.error('Error fetching characters:', error);
+  }
+}, [user.email, getIdTokenClaims]);
 useEffect(() => {
   fetchAllCharacters();
 }, [fetchAllCharacters]);
@@ -165,7 +172,7 @@ return (
                 </p>
                 {/* Edit and Delete Buttons */}
                 <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}>
-                  <button
+                {/*   <button
                     style={{
                       backgroundColor: '#B14D09',
                       color: '#fff',
@@ -179,7 +186,7 @@ return (
                     onClick={() => handleEditButtonClick(character)}
                   >
                     Edit
-                  </button>
+                  </button>*/}
                   <button
                     style={{
                       backgroundColor: '#6B4226',
