@@ -34,8 +34,8 @@ body {
   font-size: calc(10px + 2vmin);
   color: white;
 }
-.carousel-control-prev{background:black;}
-.carousel-control-next{background:black;}
+.carousel-control-prev{background:black; width: 50px;}
+.carousel-control-next{background:black; width: 50px;}
 .carousel-indicators{background:black;}
 .App-link {
   color: #61dafb;
