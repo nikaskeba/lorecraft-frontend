@@ -119,7 +119,7 @@ return (
               <div style={{ flex: 1, marginLeft: '20px' }}>
                 {character.imageURL && (
                   <img
-                    src={character.imageURL}
+                  src={character.imageURL}
                     alt="Character"
                     style={{
                       maxWidth: '100%',
@@ -129,7 +129,7 @@ return (
                     }}
                   />
                 )}
-                <div style={{ flex: 2, marginLeft: '20px' }}>
+                <div style={{ flex: 2, marginTop: '10px' }}>
                   <h5 style={{ marginBottom: '10px', color: '#B14D09' }}>
                     <strong> {character.charName}</strong>{' '}
                   </h5>
@@ -148,7 +148,7 @@ return (
                 </div>
               </div>
               {/* Backstory */}
-              <div style={{ flex: 3, marginTop: '10px', marginRight: '30px' }}>
+              <div style={{ flex: 3, marginTop: '50px', marginRight: '30px' }}>
                 <h6 style={{ color: '#B14D09' }}>
                   <strong>Backstory:</strong>
                 </h6>
