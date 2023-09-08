@@ -6,10 +6,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {useAuth0 } from '@auth0/auth0-react';
 import Modal from 'react-bootstrap/Modal'; // Import Modal component
 
+const SERVER_URL='https://lorecraft.onrender.com'
+// const SERVER_URL='http://localhost:3001'
+
 const Creations = () => {
   const { user } = useAuth0();
-const [editingCharacter, setEditingCharacter] = useState(null);
-const handleEditButtonClick = (character) => {
+  const [editingCharacter, setEditingCharacter] = useState(null);
+  const handleEditButtonClick = (character) => {
   console.log('Editing character:', character);
   setEditingCharacter(character);
 
@@ -18,7 +21,7 @@ const handleEditButtonClick = (character) => {
 
 const fetchAllCharacters = useCallback(async () => {
     try {
-      const response = await axios.get(`https://lorecraft.onrender.com/character/${user.email}`);
+      const response = await axios.get(`${SERVER_URL}/character/${user.email}`);
       if (response.status === 200) {
         setCharacters(response.data);
       }
@@ -45,7 +48,7 @@ const handleEditClick = async (userEmail, updatedCharacterData) => {
     console.log('Data to be sent:', { characters: [characterData] });
 
     // Send a PATCH request to the server with the correct data structure
-    const response = await axios.patch(`https://lorecraft.onrender.com/character/${userEmail}`, { characters: [characterData] }, {
+    const response = await axios.patch(`${SERVER_URL}/character/${userEmail}`, { characters: [characterData] }, {
       headers: {
         'Content-Type': 'application/json', // Specify the content type as JSON
       },
@@ -75,7 +78,7 @@ const handleEditClick = async (userEmail, updatedCharacterData) => {
 const handleDeleteClick = async (characterId) => {
   try {
     // Send a DELETE request to the server with the character ID in the URL
-    const response = await axios.delete(`https://lorecraft.onrender.com/character/${characterId}`);
+    const response = await axios.delete(`${SERVER_URL}/character/${characterId}`);
     if (response.status === 200) {
       console.log('Character deleted successfully');
       // ... (other success handling code)
