@@ -14,18 +14,19 @@ function CreateNew() {
 
   const { user } = useAuth0();
   const [formData, setFormData] = useState({
-race:"",
-  classType: "",
-  alignment: "",
+    race:"",
+    classType: "",
+    alignment: "",
     gender: '',
   });
 
-  const [imageUrl, setImageUrl] = useState('');
-const [charName, setCharName] = useState("");
-const [classType, setClassType] = useState("");
-const [alignment, setAlignment] = useState("");
-const [gender, setGender] = useState("");
-const [imageURL, setImageURL] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [charName, setCharName] = useState("");
+  const [race, setRace] = useState("");
+  const [classType, setClassType] = useState("");
+  const [alignment, setAlignment] = useState("");
+  const [gender, setGender] = useState("");
+  const [imageURL, setImageURL] = useState("");
   const [generatedStory, setGeneratedStory] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingImg, setIsLoadingImg] = useState(false);
@@ -44,12 +45,11 @@ const [imageURL, setImageURL] = useState("");
       'Hunter', 'Monk', 'Bard', 'Necromancer', 'Summoner', 'Alchemist', 'Sorcerer'
     ],
       gender: ['Male', 'Female', 'Non-binary', 'Other'],
-        alignment: [
+      alignment: [
       'Brave', 'Wise', 'Mysterious', 'Charming', 'Resourceful', 'Honorable',
       'Loyal', 'Adventurous', 'Stoic', 'Eloquent', 'Fearless', 'Empathic', 'Cunning', 'Resilient'
     ]
     };
-   
      
     setFormData({
       ...formData,
@@ -63,7 +63,7 @@ const [imageURL, setImageURL] = useState("");
     setIsLoading(true);
   
     try {
-      const prompt = `Generate a concise unique backstory for ${formData.name}, a ${formData.gender} ${formData.race} ${formData.classType} character with a ${formData.personality} alignment in a fantasy setting in a unique place. Limit the length to around 200 words.`;
+      const prompt = `Generate a concise unique backstory for ${formData.charName}, a ${formData.gender} ${formData.race} ${formData.classType} character with a ${formData.personality} alignment in a fantasy setting in a unique place. Limit the length to around 200 words.`;
       const response = await axios.post(OPENAI_API_ENDPOINT, {
         model: OPENAI_MODEL,
         messages: [{ role: 'system', content: 'You are a helpful assistant.' }, { role: 'user', content: prompt }],
@@ -149,14 +149,15 @@ const [imageURL, setImageURL] = useState("");
 const handleCreateButtonClick = async () => {
   try {
     // Collect the data from the state variables
-       const characterData = {
-      userEmail: user.email,  // Assuming 'user' contains the email information
+  const characterData = {
+  userEmail: user.email,  // Assuming 'user' contains the email information
   charName: formData.charName, 
+  race: formData.race, 
   classType: formData.classType, 
   alignment: formData.alignment, 
   gender: formData.gender, 
-  imageURL: "placeholder.png", 
-  backstory: "backstory",
+  imageURL: generatedImage, 
+  backstory: generatedStory,
     };
 
     // Log the data to be sent (add this line to debug the data)
@@ -181,7 +182,7 @@ const handleCreateButtonClick = async () => {
   return (
 <div><Header />
    <div className="container">
-         <div className="row">
+      <div className="row">
       <div className="col-md-6">
       <div style={{ border: '1px solid #000',background:'#fff',  padding: '10px', boxShadow: '0px 0px 10px #000', maxWidth: '400px', margin: '0 auto' }}>
    <div className="form-group">
