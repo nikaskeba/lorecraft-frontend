@@ -1,12 +1,15 @@
 import Header from './Header';
 
+
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useCallback } from 'react';
 import axios from 'axios';
 import { withAuth0, useAuth0 } from '@auth0/auth0-react';
 
 const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+
 const OPENAI_API_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
 const OPENAI_IMAGE_API_ENDPOINT = 'https://api.openai.com/v1/images/generations';
 const OPENAI_MODEL = 'gpt-3.5-turbo-0613';
@@ -14,8 +17,11 @@ const SERVER_URL='https://lorecraft.onrender.com'
 // const SERVER_URL='http://localhost:3001'
 
 function CreateNew() {
-  const { user, getIdTokenClaims } = useAuth0();
-  const [setToken] = useState(null);
+    const { user, getAccessTokenSilently, getIdTokenClaims } = useAuth0();
+  const [generatedImage, setGeneratedImage] = React.useState(""); // Assuming this is a state variable, initialize it accordingly
+
+
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
     const getToken = async () => {
@@ -51,7 +57,7 @@ function CreateNew() {
   const [generatedStory, setGeneratedStory] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingImg, setIsLoadingImg] = useState(false);
-  const [generatedImage, setGeneratedImage] = useState(null);
+
 
 
 
@@ -163,13 +169,18 @@ function CreateNew() {
 
 
   
-const handleCreateButtonClick = async () => {
-  if (!user) {
-    console.error('User not logged in');
-    return;
-  }
 
-  try {
+const handleCreateButtonClick = async () => {
+    if (!user) {
+      console.error('User not logged in');
+      return;
+    }
+
+    try {
+      const token = await getAccessTokenSilently();
+   
+
+   
     // Collect the data from the state variables
    const characterData = {
       userEmail: user.email,  // This should now work since we check if user is defined
@@ -180,11 +191,17 @@ const handleCreateButtonClick = async () => {
       gender: formData.gender, 
       imageURL: generatedImage, 
       backstory: generatedStory,
-    };
+        };   console.log('Data to be sent:', characterData);
+
+    const response = await axios.post(`${SERVER_URL}/character`, characterData, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
     // Log the data to be sent (add this line to debug the data)
     console.log('Data to be sent:', characterData);
     // Send the data to the server using a POST request
-    const response = await axios.post(`${SERVER_URL}/character`, characterData);
 
     // Handle the response from the server (you might want to display a success message or handle errors)
     if (response.status === 201) {
