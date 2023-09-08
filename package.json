@@ -1,8 +1,8 @@
 {
-  "name": "a_quiz_generator",
+  "name": "lorecraft",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3000",
+
   "dependencies": {
     "@auth0/auth0-react": "^2.2.1",
     "@leecheuk/react-google-login": "^5.4.1",
