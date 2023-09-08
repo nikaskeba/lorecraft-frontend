@@ -44,7 +44,7 @@ class App extends Component {
         <div className="App">
           {isLoggedIn ? (
             <>
-              <AuthButtons />
+          
               <Routes>
                 <Route path="/about" element={<About />} />
                 <Route path="/profile" element={<Profile />} />
@@ -55,7 +55,7 @@ class App extends Component {
             </>
           ) : (
            'HELLO'
-          )}
+          )}V
         </div>
       </Router>
     );

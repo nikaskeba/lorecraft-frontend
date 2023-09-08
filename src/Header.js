@@ -1,12 +1,19 @@
+import { useAuth0 } from '@auth0/auth0-react'; // Import the useAuth0 hook
+
 import React from 'react';
 import About from './About';
 import CreateNew from './CreateNew';
 import Creations from './Creations';
+
 import Profile from './Profile';
 import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';  // Import Bootstrap CSS
 import './Header.css';
+import AuthButtons from './auth/AuthButtons';
+
 const Header = () => {
+    const { isAuthenticated } = useAuth0(); // Call the useAuth0 hook to get the isAuthenticated variable
+
   return (
     <header className="bg-light">
       <div className="container">
@@ -17,21 +24,31 @@ const Header = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
-              <li className="nav-item">
-                <Link to="/" className="nav-link">Home</Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/About" className="nav-link">About</Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/CreateNew" className="nav-link">Create New</Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/Creations" className="nav-link">Creations</Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/Profile" className="nav-link">Profile</Link>
-              </li>
+      
+       {isAuthenticated ? (  // Conditionally render the navigation links based on isAuthenticated value
+            <>
+              <ul className="navbar-nav">
+                <li className="nav-item">
+                  <Link to="/" className="nav-link">Home</Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/About" className="nav-link">About</Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/CreateNew" className="nav-link">Create New</Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/Creations" className="nav-link">Creations</Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/Profile" className="nav-link">Profile</Link>
+                </li>
+              </ul>
+              <AuthButtons />
+            </>
+          ) : (
+            <AuthButtons />
+          )}
             </ul>
           </div>
         </nav>
