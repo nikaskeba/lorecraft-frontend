@@ -52,7 +52,7 @@ class App extends Component {
             </>
           ) : (
            'HELLO'
-          )}V
+          )}
         </div>
       </Router>
     );
