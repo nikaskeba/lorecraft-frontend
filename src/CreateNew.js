@@ -20,13 +20,7 @@ function CreateNew() {
     gender: '',
   });
 
-  const [imageUrl, setImageUrl] = useState("");
-  const [charName, setCharName] = useState("");
-  const [race, setRace] = useState("");
-  const [classType, setClassType] = useState("");
-  const [alignment, setAlignment] = useState("");
-  const [gender, setGender] = useState("");
-  const [imageURL, setImageURL] = useState("");
+ 
   const [generatedStory, setGeneratedStory] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingImg, setIsLoadingImg] = useState(false);
