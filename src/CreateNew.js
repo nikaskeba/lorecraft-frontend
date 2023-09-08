@@ -38,7 +38,7 @@ function CreateNew() {
     };
 
     getToken();
-  }, [getIdTokenClaims]);
+  }, [getIdTokenClaims, setToken]);
 
   const [formData, setFormData] = useState({
     race:"",
