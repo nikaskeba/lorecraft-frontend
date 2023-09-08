@@ -105,18 +105,16 @@ const handleDeleteClick = async (characterId) => {
 <Carousel>
   {characters.map((character, index) => (
     <Carousel.Item key={index}>
-      <div>
-   <h5>Char Name: {character.charName}</h5>
-    
+    <div>
+    <h5>Char Name: {character.charName}</h5>
+        <p>Race: {character.race}</p>
         <p>Class Type: {character.classType}</p>
         <p>Alignment: {character.alignment}</p>
         <p>Gender: {character.gender}</p>
-        <p>Image URL: {character.imageURL}</p>
+        {character.imageURL && <img src={character.imageURL} alt="Character" />}
         <p>Backstory: {character.backstory}</p>
         <button onClick={() => handleEditButtonClick(character._id)}>Edit</button>
-   <button onClick={() => handleDeleteClick(character._id)}>Delete</button>
-
-
+        <button onClick={() => handleDeleteClick(character._id)}>Delete</button>
       </div>
     </Carousel.Item>
   ))}
