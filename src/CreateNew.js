@@ -34,7 +34,7 @@ function CreateNew() {
       };
 
       const response = await axios(config);
-      console.log(response);
+      console.log('The Server Said: ', response);
     };
 
     getToken();
