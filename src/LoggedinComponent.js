@@ -1,13 +1,12 @@
 import Header from './Header';
-import About from './About';
+
 import { useAuth0 } from '@auth0/auth0-react'; // Import the useAuth0 hook
 
-import React, { useState } from 'react';
-import { Link } from "react-router-dom";
+
+
 
 import './LoggedinComponent.css';
-import axios from 'axios';
-const pattern_with_prefix = /(.*?)\(([^()]+)\)([^()]+)\(([^()]+)\)/;
+
 
 
 const LoggedInComponent = () => {

@@ -1,11 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react'; // Import the useAuth0 hook
 
 import React from 'react';
-import About from './About';
-import CreateNew from './CreateNew';
-import Creations from './Creations';
 
-import Profile from './Profile';
 import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';  // Import Bootstrap CSS
 import './Header.css';

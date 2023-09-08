@@ -1,9 +1,10 @@
 import Header from './Header';
-import React, { useState, useEffect } from 'react';
+import { useCallback, useEffect,useState } from 'react';
+
 import axios from 'axios';
 import Carousel from 'react-bootstrap/Carousel';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { withAuth0, useAuth0 } from '@auth0/auth0-react';
+import {useAuth0 } from '@auth0/auth0-react';
 import Modal from 'react-bootstrap/Modal'; // Import Modal component
 
 const Creations = () => {
@@ -16,7 +17,7 @@ const handleEditButtonClick = (character) => {
 };
   const [characters, setCharacters] = useState([]);
 
-  const fetchAllCharacters = async () => {
+const fetchAllCharacters = useCallback(async () => {
     try {
       const response = await axios.get(`https://lorecraft.onrender.com/character/${user.email}`);
       if (response.status === 200) {
@@ -26,11 +27,11 @@ const handleEditButtonClick = (character) => {
       console.error('Error fetching characters:', error);
       // Here you might set an error state variable to show an error message to the user
     }
-  };
+}, [user.email]);
 
-  useEffect(() => {
-    fetchAllCharacters();
-  }, []);
+useEffect(() => {
+  fetchAllCharacters();
+}, [fetchAllCharacters]);
 const handleEditClick = async (userEmail, updatedCharacterData) => {
   try {
     const { charName, classType, ...idData } = updatedCharacterData;

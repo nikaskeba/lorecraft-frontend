@@ -2,8 +2,8 @@ import Header from './Header';
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import { withAuth0 } from '@auth0/auth0-react';
-import { useAuth0 } from '@auth0/auth0-react';
+
+import { withAuth0, useAuth0 } from '@auth0/auth0-react';
 
 const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
 const OPENAI_API_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
@@ -20,13 +20,7 @@ function CreateNew() {
     gender: '',
   });
 
-  const [imageUrl, setImageUrl] = useState("");
-  const [charName, setCharName] = useState("");
-  const [race, setRace] = useState("");
-  const [classType, setClassType] = useState("");
-  const [alignment, setAlignment] = useState("");
-  const [gender, setGender] = useState("");
-  const [imageURL, setImageURL] = useState("");
+ 
   const [generatedStory, setGeneratedStory] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingImg, setIsLoadingImg] = useState(false);
@@ -113,9 +107,7 @@ function CreateNew() {
     }
   };
   
-  const userData = () => {
-    return user ? user.email : null;
-  };
+
   
   const randomizeAll = () => {
     const randomValues = {
@@ -142,9 +134,7 @@ function CreateNew() {
     });
   };
 
-  const handleSubmit = () => {
-    console.log('Form Submitted', formData);
-  };
+
   
 const handleCreateButtonClick = async () => {
   try {
