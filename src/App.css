@@ -1,6 +1,8 @@
 .App {
   text-align: center;
 } 
+.carousel-indicators{
+position: inherit;}
 .carousel-item {    background: white;}
 body {
   background-image: url('./floor.png');
