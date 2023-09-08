@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Carousel from 'react-bootstrap/Carousel';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { withAuth0, useAuth0 } from '@auth0/auth0-react';
+import {useAuth0 } from '@auth0/auth0-react';
 import Modal from 'react-bootstrap/Modal'; // Import Modal component
 
 const Creations = () => {
@@ -28,9 +28,9 @@ const handleEditButtonClick = (character) => {
     }
   };
 
-  useEffect(() => {
-    fetchAllCharacters();
-  }, []);
+useEffect(() => {
+  fetchAllCharacters();
+}, [fetchAllCharacters]);
 const handleEditClick = async (userEmail, updatedCharacterData) => {
   try {
     const { charName, classType, ...idData } = updatedCharacterData;
