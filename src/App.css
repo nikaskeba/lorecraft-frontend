@@ -2,7 +2,11 @@
   text-align: center;
 } 
 .carousel-indicators{
-position: inherit;}
+position: inherit;
+margin-right: 0%; 
+    margin-bottom: 0rem; 
+  margin-left: 0%;
+}
 .carousel-item {    background: white;}
 body {
   background-image: url('./floor.png');
