@@ -1,18 +1,43 @@
 import Header from './Header';
-import React, { useState } from 'react';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
 import { withAuth0, useAuth0 } from '@auth0/auth0-react';
-
 const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
 const OPENAI_API_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
 const OPENAI_IMAGE_API_ENDPOINT = 'https://api.openai.com/v1/images/generations';
 const OPENAI_MODEL = 'gpt-3.5-turbo-0613';
 
 function CreateNew() {
+  const { user, getIdTokenClaims } = useAuth0();
+  const [token, setToken] = useState(null);
 
-  const { user } = useAuth0();
+  useEffect(() => {
+    const getToken = async () => {
+      let res = await getIdTokenClaims();
+      const token = res.__raw;
+      console.log('OUR WEB TOKEN!', token);
+      setToken(token);
+
+      // Now you can use the token to make an authenticated API request
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        method: 'GET',
+        baseURL: 'https://lorecraft.onrender.com',
+        url: '/character',
+      };
+
+      const response = await axios(config);
+      console.log(response);
+    };
+
+    getToken();
+  }, [getIdTokenClaims]);
+
   const [formData, setFormData] = useState({
     race:"",
     classType: "",
@@ -137,17 +162,22 @@ function CreateNew() {
 
   
 const handleCreateButtonClick = async () => {
+  if (!user) {
+    console.error('User not logged in');
+    return;
+  }
+
   try {
     // Collect the data from the state variables
-  const characterData = {
-  userEmail: user.email,  // Assuming 'user' contains the email information
-  charName: formData.charName, 
-  race: formData.race, 
-  classType: formData.classType, 
-  alignment: formData.alignment, 
-  gender: formData.gender, 
-  imageURL: generatedImage, 
-  backstory: generatedStory,
+   const characterData = {
+      userEmail: user.email,  // This should now work since we check if user is defined
+      charName: formData.charName, 
+      race: formData.race, 
+      classType: formData.classType, 
+      alignment: formData.alignment, 
+      gender: formData.gender, 
+      imageURL: generatedImage, 
+      backstory: generatedStory,
     };
 
     // Log the data to be sent (add this line to debug the data)
@@ -173,7 +203,7 @@ const handleCreateButtonClick = async () => {
 <div><Header />
    <div className="container">
       <div className="row">
-      <div className="col-md-6">
+      <div className="col-md-5">
       <div style={{ border: '1px solid #000',background:'#fff',  padding: '10px', boxShadow: '0px 0px 10px #000', maxWidth: '400px', margin: '0 auto' }}>
    <div className="form-group">
   <label>Enter Name</label>
